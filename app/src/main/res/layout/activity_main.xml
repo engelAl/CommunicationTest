@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/b_vernetzung"
+    android:background="@drawable/background_app"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -13,7 +13,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="130dp"
         android:layout_marginEnd="32dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,7 +26,8 @@
             android:layout_height="wrap_content"
             android:text="Bluetooth is Disconnected"
             android:textAlignment="center"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:textColor="@color/white"/>
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -41,8 +42,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
                 android:layout_weight="1"
-                android:backgroundTint="@color/blue"
-                android:text="Connect" />
+                android:backgroundTint="@color/dark_blue"
+                android:text="Connect"
+                android:textColor="@color/white"/>
 
             <Button
                 android:id="@+id/btnDisconnect"
@@ -50,8 +52,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
-                android:backgroundTint="@color/blue"
-                android:text="Disconnect" />
+                android:backgroundTint="@color/dark_blue"
+                android:text="Disconnect"
+                android:textColor="@color/white"/>
         </LinearLayout>
 
     </LinearLayout>
@@ -60,7 +63,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="130dp"
+        android:layout_marginTop="160dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
@@ -74,6 +77,7 @@
             android:layout_marginEnd="32dp"
             android:layout_marginBottom="8dp"
             android:textSize="24sp"
+            android:textColor="@color/dark_blue"
             />
 
         <LinearLayout
@@ -97,7 +101,8 @@
                 android:text="Multi turn value:"
                 android:textFontWeight="700"
                 android:textSize="18sp"
-                android:gravity="center"/>
+                android:gravity="center_vertical"
+                android:textColor="@color/dark_blue"/>
 
             <TextView
                 android:id="@+id/txtMultiValue"
@@ -107,7 +112,8 @@
                 android:text="Value"
                 android:textAlignment="center"
                 android:gravity="center"
-                android:textSize="18sp"/>
+                android:textSize="18sp"
+                android:textColor="@color/dark_blue"/>
 
         </LinearLayout>
 
@@ -132,7 +138,8 @@
                 android:text="Single turn value:"
                 android:textFontWeight="700"
                 android:textSize="18sp"
-                android:gravity="center"/>
+                android:gravity="center_vertical"
+                android:textColor="@color/dark_blue"/>
 
             <TextView
                 android:id="@+id/txtSingleValue"
@@ -142,7 +149,8 @@
                 android:text="Value"
                 android:textAlignment="center"
                 android:textSize="18sp"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:textColor="@color/dark_blue"/>
 
         </LinearLayout>
 
