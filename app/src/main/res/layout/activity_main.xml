@@ -10,10 +10,10 @@
 
     <LinearLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="130dp"
+        android:layout_marginTop="55dp"
         android:layout_marginEnd="32dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
@@ -58,12 +58,13 @@
         </LinearLayout>
 
     </LinearLayout>
-
+    <!-- android:layout_marginTop="160dp" -->
     <LinearLayout
+        android:id="@+id/linearLayoutMeasurement"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
@@ -154,6 +155,32 @@
 
         </LinearLayout>
 
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutGauge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutMeasurement"
+        >
+
+        <in.unicodelabs.kdgaugeview.KdGaugeView
+            android:id="@+id/speedMeter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:animationTime="0"
+            app:maxSpeed="350"
+            app:minSpeed="0"
+            app:speed_limit="350"
+            app:unitOfMeasurement="rpm"
+            app:speedTextSize="80dp"
+            />
 
     </LinearLayout>
 

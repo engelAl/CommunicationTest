@@ -22,6 +22,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
+import in.unicodelabs.kdgaugeview.KdGaugeView;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,6 +40,15 @@ public class MainActivity extends AppCompatActivity {
     private final static int Single_READ = 3;
     private final static int Error_READ = 4;
 
+    private long millis1 = 0;
+    private long millis2 = 0;
+    private long timeDiff = 0;
+    private int count = 0;
+    double rotations1 = 0;
+    double rotations2 = 0;
+    double value;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Instantiate UI
+        final KdGaugeView speedMeterView = (KdGaugeView) findViewById(R.id.speedMeter);
         final TextView bluetoothStatus = findViewById(R.id.textBluetoothStatus);
         Button btnConnect = findViewById(R.id.btnConnect);
         Button btnDisconnect= findViewById(R.id.btnDisconnect);
@@ -105,14 +117,71 @@ public class MainActivity extends AppCompatActivity {
                     case Multi_READ:
                         statusText = msg.obj.toString().replace("~","");
                         int multiRead = (int) Double.parseDouble(statusText);
-                        //txtMultiValue.setText(statusText);
                         txtMultiValue.setText(Integer.toString(multiRead));
                         break;
                     case Single_READ:
                         statusText = msg.obj.toString().replace("#","");
-                        double singleRead = Double.parseDouble(statusText);
-                        //txtSingleValue.setText(statusText);
+                        String[] staText = statusText.split("-");
+//                        double singleRead = Double.parseDouble(statusText);
+
+                        double singleRead = Double.parseDouble(staText[0]);
+                        int rotDirection = (int)Double.parseDouble(staText[1]);
+
+                        // After starting the app current System Time in milliseconds is being recorded
+                        if(millis1 == 0){
+                            millis1 = System.currentTimeMillis();
+                            // Speed is set to 0 rpm
+                            value = 0;
+                            speedMeterView.setSpeed((float)value);
+                            // first received single turn value is saved
+                            rotations1 = singleRead;
+                        } else {
+                            // count is used to reduce the update speed of gauge
+                            if (count == 100) {
+                                millis2 = millis1;
+                                // new current System Time is recorded
+                                millis1 = System.currentTimeMillis();
+                                // time difference between new and old System Time is calculated
+                                if(millis1 >= millis2) {
+                                    //timeDiff = (Math.abs(millis1 - millis2));
+                                    timeDiff = millis1 - millis2;
+                                } else {
+                                    long max = 9223372036854775807L;
+                                    timeDiff = (max - millis2) + millis1;
+                                }
+                                rotations2 = rotations1;
+                                // New single turn value is saved
+                                rotations1 = singleRead;
+                                // difference between new angle and old angle are calculated
+                                // difference is calculated into rotations
+
+
+                                double  rotationsDiff;
+                                if(((rotations1 - rotations2) > 0) && (rotDirection == 1)){
+                                  rotationsDiff = (rotations1 - rotations2)/ 360.0;
+                                } else if(((rotations1 - rotations2) < 0) && (rotDirection == 1)){
+                                    rotationsDiff = (rotations1 + (rotations2 - 360.0))/ 360.0;
+                                } else if(((rotations1 - rotations2) < 0) && (rotDirection == 0)){
+                                    rotationsDiff = (rotations2 - rotations1)/360.0;
+                                } else if(((rotations1 - rotations2) > 0) && (rotDirection == 0)){
+                                    rotationsDiff = (rotations2 + (360.0 - rotations1))/360.0;
+                                } else {
+                                    rotationsDiff = 0;
+                                }
+
+
+//                                double  rotationsDiff = Math.abs((rotations1 - rotations2)) / 360.0;
+                                // calculation of rpm
+                                double sec2min = 1.0/60.0;
+                                value = rotationsDiff/(timeDiff*0.001*sec2min);
+                                count = 1;
+                            }
+                            count = count + 1;
+                        }
+
                         txtSingleValue.setText(Double.toString(singleRead)+"°");
+                        //txtSingleValue.setText(Integer.toString(rotDirection)+"°");
+                        speedMeterView.setSpeed((float)value);
                         break;
                     case Error_READ:
                         statusText = "Restart Arduino!";
@@ -132,6 +201,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
     }
 
     /* ============================ Thread to Create Connection ================================= */
@@ -247,13 +317,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        // Send command to Arduino Board
-        // This method must be called from Main Thread
-        public void write(String input) {
-            byte[] bytes = input.getBytes(); //converts entered String into bytes
-            try {
-                mmOutStream.write(bytes);
-            } catch (IOException e) { }
-        }
     }
 }
